@@ -1,13 +1,14 @@
 package br.com.FindJobs.api.controllers;
 
-import br.com.FindJobs.api.dtos.AddressUserDto;
 import br.com.FindJobs.api.dtos.VacancyDto;
 import br.com.FindJobs.api.models.VacancyModel;
 import br.com.FindJobs.api.services.VacancyService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 @RestController
 @RequestMapping("/Vacancy")
@@ -19,14 +20,18 @@ public class VacancyController {
         this.service = service;
     }
 
+    @GetMapping("/")
+    public ResponseEntity<?> getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return this.service.getAll(pageable);
+    }
+
     @GetMapping("/{id}")
     public VacancyModel get(@PathVariable Long id) {
         return this.service.get(id);
-    }
-
-    @GetMapping("/getAll")
-    public ResponseEntity<?> getAll() {
-        return this.service.getAll();
     }
 
     @DeleteMapping("/{id}")
@@ -50,16 +55,22 @@ public class VacancyController {
     }
 
     @GetMapping("/getAllByTitle/{title}")
-    public ResponseEntity<?> getAllByTitle(@PathVariable String title) {
-        return this.service.getAllByTitle(title);
+    public ResponseEntity<?> getAllByTitle(
+            @PathVariable String title,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return this.service.getAllByTitle(title, pageable);
     }
 
     @GetMapping("/getAllByCategory/{category}")
-    public ResponseEntity<?> getAllByCategory(@PathVariable String category) {
-        return this.service.getAllByCategory(category);
+    public ResponseEntity<?> getAllByCategory(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return this.service.getAllByCategory(category, pageable);
     }
-
-
 }
-
-

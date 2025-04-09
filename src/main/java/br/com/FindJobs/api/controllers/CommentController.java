@@ -6,6 +6,9 @@ import br.com.FindJobs.api.services.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,13 +29,23 @@ public class CommentController {
     }
 
     @GetMapping("/getAllOfUser/{id}")
-    public ResponseEntity<?> getAllOfUser(@PathVariable Long id) {
-        return this.service.getAllOfUser(id);
+    public ResponseEntity<?> getAllOfUser(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return this.service.getAllOfUser(id, pageable);
     }
 
     @GetMapping("/getAllOfVacancy/{vacancyId}")
-    public ResponseEntity<?> getAllOfVacancy(@PathVariable Long vacancyId) {
-        return this.service.getAllOfVacancy(vacancyId);
+    public ResponseEntity<?> getAllOfVacancy(
+            @PathVariable Long vacancyId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return this.service.getAllOfVacancy(vacancyId, pageable);
     }
 
     @GetMapping("/{id}")

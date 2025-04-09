@@ -5,6 +5,9 @@ import br.com.FindJobs.api.services.ApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,13 +34,23 @@ public class ApplicationController {
     }
 
     @GetMapping("/findAllApplicationsOfUser/{id}")
-    public ResponseEntity<?> findAllApplicationsOfUser(@PathVariable() Long id) {
-        return this.service.findAllApplicationsOfUser(id);
+    public ResponseEntity<?> findAllApplicationsOfUser(
+            @PathVariable() Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return this.service.findAllApplicationsOfUser(id, pageable);
     }
 
     @GetMapping("/findAllApplicationsOfVacancy/{id}")
-    public ResponseEntity<?> findAllApplicationsOfVacancy(@PathVariable() Long id) {
-        return this.service.findAllApplicationsOfVacancy(id);
+    public ResponseEntity<?> findAllApplicationsOfVacancy(
+            @PathVariable() Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return this.service.findAllApplicationsOfVacancy(id, pageable);
     }
 
 }

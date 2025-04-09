@@ -5,6 +5,9 @@ import br.com.FindJobs.api.dtos.FavoriteDto;
 import br.com.FindJobs.api.services.FavoriteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,8 +37,13 @@ public class FavoriteController {
     }
 
     @GetMapping("/findAllFavoriteVacancyOfUser/{id}")
-    public ResponseEntity<?> findAllFavoriteVacancyOfUser(@PathVariable() Long id ) {
-        return this.service.findAllFavoriteVacancyOfUser(id);
+    public ResponseEntity<?> findAllFavoriteVacancyOfUser(
+            @PathVariable() Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return this.service.findAllFavoriteVacancyOfUser(id, pageable);
     }
 
     @GetMapping("/amountFavoriteInVacancy/{id}")

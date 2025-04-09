@@ -6,6 +6,9 @@ import br.com.FindJobs.api.models.JobTypeModel;
 import br.com.FindJobs.api.services.JobTypeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,8 +53,12 @@ public class JobTypeController {
     }
 
     @GetMapping("/getAllToAdm")
-    public ResponseEntity<?> getAllToAdm() {
-        return this.service.getAllForAdm();
+    public ResponseEntity<?> getAllToAdm(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return this.service.getAllForAdm(pageable);
     }
 
 }

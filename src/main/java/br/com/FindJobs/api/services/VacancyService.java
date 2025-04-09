@@ -5,6 +5,8 @@ import br.com.FindJobs.api.models.VacancyModel;
 import br.com.FindJobs.api.repositories.EnterpriseRepository;
 import br.com.FindJobs.api.repositories.VacancyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,15 @@ public class VacancyService {
     public VacancyService(VacancyRepository repository, EnterpriseRepository enterpriseRepository) {
         this.repository = repository;
         this.enterpriseRepository = enterpriseRepository;
+    }
+
+    public ResponseEntity<?> getAll(Pageable pageable) {
+        try {
+            Page<VacancyModel> vacancies = this.repository.findAll(pageable);
+            return new ResponseEntity<>(vacancies, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public ResponseEntity<?> create(Long enterpriseId, VacancyModel model) {
@@ -118,27 +129,19 @@ public class VacancyService {
         }
     }
 
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<?> getAllByTitle(String title, Pageable pageable) {
         try {
-            List<VacancyModel> vacancy = this.repository.findAll();
-
-            return new ResponseEntity<>(vacancy, HttpStatus.FOUND);
+            Page<VacancyModel> vacancies = this.repository.findAllByTitleContaining(title, pageable);
+            return new ResponseEntity<>(vacancies, HttpStatus.FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public ResponseEntity<?> getAllByTitle(String title) {
+    public ResponseEntity<?> getAllByCategory(String category, Pageable pageable) {
         try {
-            return new ResponseEntity<>(this.repository.findAllByTitleContaining(title), HttpStatus.FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public ResponseEntity<?> getAllByCategory(String category) {
-        try {
-            return new ResponseEntity<>(this.repository.findAllByCategory(category), HttpStatus.FOUND);
+            Page<VacancyModel> vacancies = this.repository.findAllByCategory(category, pageable);
+            return new ResponseEntity<>(vacancies, HttpStatus.FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

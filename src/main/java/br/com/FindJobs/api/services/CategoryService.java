@@ -5,6 +5,7 @@ import br.com.FindJobs.api.models.UserModel;
 import br.com.FindJobs.api.repositories.CategoryRepository;
 import br.com.FindJobs.api.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -102,9 +103,9 @@ public class CategoryService {
         }
     }
 
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<?> getAll(Pageable pageable) {
         try {
-            return new ResponseEntity<>(this.repository.findAllByIsActivedTrue(), HttpStatus.FOUND);
+            return new ResponseEntity<>(this.repository.findAllByIsActivedTrue(pageable), HttpStatus.FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

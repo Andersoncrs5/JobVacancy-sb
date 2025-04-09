@@ -7,6 +7,7 @@ import br.com.FindJobs.api.repositories.CommentRepository;
 import br.com.FindJobs.api.repositories.UserRepository;
 import br.com.FindJobs.api.repositories.VacancyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -45,21 +46,21 @@ public class CommentService {
         }
     }
 
-    public ResponseEntity<?> getAllOfUser(Long userId){
+    public ResponseEntity<?> getAllOfUser(Long userId, Pageable pageable){
         try {
             UserModel user = this.userService.get(userId);
 
-            return ResponseEntity.status(HttpStatus.FOUND).body(this.repository.findAllByUser(user));
+            return ResponseEntity.status(HttpStatus.FOUND).body(this.repository.findAllByUser(user, pageable));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public ResponseEntity<?> getAllOfVacancy(Long vacancyId){
+    public ResponseEntity<?> getAllOfVacancy(Long vacancyId, Pageable pageable){
         try {
             VacancyModel vacancy = this.vacancyService.get(vacancyId);
 
-            return ResponseEntity.status(HttpStatus.FOUND).body(this.repository.findAllByVacancy(vacancy));
+            return ResponseEntity.status(HttpStatus.FOUND).body(this.repository.findAllByVacancy(vacancy, pageable));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

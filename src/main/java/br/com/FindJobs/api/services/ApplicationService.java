@@ -6,6 +6,8 @@ import br.com.FindJobs.api.models.UserModel;
 import br.com.FindJobs.api.models.VacancyModel;
 import br.com.FindJobs.api.repositories.ApplicationRepository;
 import br.com.FindJobs.api.repositories.VacancyRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -87,11 +89,11 @@ public class ApplicationService {
         }
     }
 
-    public ResponseEntity<?> findAllApplicationsOfUser(Long id) {
+    public ResponseEntity<?> findAllApplicationsOfUser(Long id, Pageable pageable) {
         try {
             UserModel user = this.userService.get(id);
 
-            List<ApplicationModel> applications = this.repository.findAllByUser(user);
+            var applications = this.repository.findAllByUser(user, pageable);
 
             return new ResponseEntity<>(applications, HttpStatus.FOUND);
         } catch (Exception e) {
@@ -99,11 +101,11 @@ public class ApplicationService {
         }
     }
 
-    public ResponseEntity<?> findAllApplicationsOfVacancy(Long id) {
+    public ResponseEntity<?> findAllApplicationsOfVacancy(Long id, Pageable pageable) {
         try {
             VacancyModel vacancy = this.vacancyService.get(id);
 
-            List<ApplicationModel> applications = this.repository.findAllByVacancy(vacancy);
+            Page<ApplicationModel> applications = this.repository.findAllByVacancy(vacancy, pageable);
 
             return new ResponseEntity<>(applications, HttpStatus.FOUND);
         } catch (Exception e) {

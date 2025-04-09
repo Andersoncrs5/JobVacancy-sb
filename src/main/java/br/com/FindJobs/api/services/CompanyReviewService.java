@@ -6,6 +6,8 @@ import br.com.FindJobs.api.models.UserModel;
 import br.com.FindJobs.api.repositories.CompanyReviewRepository;
 import br.com.FindJobs.api.repositories.EnterpriseRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -49,13 +51,13 @@ public class CompanyReviewService {
         }
     }
 
-    public ResponseEntity<?> getReviewOfEnterprise(Long userId) {
+    public ResponseEntity<?> getReviewOfEnterprise(Long userId, Pageable pageable) {
         try {
             UserModel user = this.userService.get(userId);
 
             EnterpriseModel enterprise = this.enterpriseService.get(userId);
 
-            List<CompanyReviewModel> list = this.repository.findAllByEnterprise(enterprise);
+            Page<CompanyReviewModel> list = this.repository.findAllByEnterprise(enterprise, pageable);
 
             return new ResponseEntity<>(list, HttpStatus.OK);
         } catch (Exception e) {

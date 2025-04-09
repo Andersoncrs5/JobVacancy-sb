@@ -7,6 +7,8 @@ import br.com.FindJobs.api.repositories.FavoriteRepository;
 import br.com.FindJobs.api.repositories.UserRepository;
 import br.com.FindJobs.api.repositories.VacancyRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -86,11 +88,11 @@ public class FavoriteService {
         }
     }
 
-    public ResponseEntity<?> findAllFavoriteVacancyOfUser(Long id) {
+    public ResponseEntity<?> findAllFavoriteVacancyOfUser(Long id, Pageable pageable) {
         try {
             UserModel user = this.userService.get(id);
 
-            List<FavoriteModel> favorites = this.repository.findAllByUser(user);
+            Page<FavoriteModel> favorites = this.repository.findAllByUser(user, pageable);
 
             return new ResponseEntity<>(favorites, HttpStatus.FOUND);
         } catch (Exception e) {
