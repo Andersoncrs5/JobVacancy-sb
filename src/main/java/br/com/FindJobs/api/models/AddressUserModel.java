@@ -33,8 +33,7 @@ public class AddressUserModel {
     @Column(length = 200, nullable = false)
     private String country;
 
-    @Column(nullable = false)
-    @Lob
+    @Column(length = 1500, nullable = false)
     private String complementary;
 
     @OneToOne

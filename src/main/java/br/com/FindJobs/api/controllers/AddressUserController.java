@@ -31,9 +31,9 @@ public class AddressUserController {
         return this.service.create(id, dto.mappearToCreate());
     }
 
-    @PutMapping("/")
-    public ResponseEntity<?> update(@RequestBody @Valid AddressUserDto dto) {
-        return this.service.update(dto.mappearToUpdate());
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid AddressUserDto dto) {
+        return this.service.update(id, dto.mappearToUpdate());
     }
 
 }

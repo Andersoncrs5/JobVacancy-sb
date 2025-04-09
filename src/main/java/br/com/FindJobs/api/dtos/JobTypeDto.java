@@ -1,6 +1,7 @@
 package br.com.FindJobs.api.dtos;
 
 import br.com.FindJobs.api.models.JobTypeModel;
+import br.com.FindJobs.api.models.UserModel;
 import jakarta.validation.constraints.NotBlank;
 
 public record JobTypeDto(
@@ -22,6 +23,7 @@ public record JobTypeDto(
 
         jobType.setId(id);
         jobType.setName(name);
+        jobType.setUser(new UserModel());
 
         return jobType;
     }

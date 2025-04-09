@@ -12,6 +12,8 @@ public record VacancyDto(
         String title,
 
         @NotBlank(message = "The field description is required")
+        @Max(3000)
+        @Min(100)
         String description,
 
         @NotBlank(message = "The field typeContraction is required")

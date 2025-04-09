@@ -71,8 +71,15 @@ public class AddressUserService {
         }
     }
 
-    public ResponseEntity<?> update(AddressUserModel model){
+    public ResponseEntity<?> update(Long userId, AddressUserModel model){
         try {
+            if (model.getId() <= 0)
+                return new ResponseEntity<>("id is required", HttpStatus.BAD_REQUEST);
+
+            var check = this.get(userId);
+
+            model.setUser(check.getUser());
+
             var address = this.repository.save(model);
 
             return new ResponseEntity<>(address, HttpStatus.OK);

@@ -1,6 +1,7 @@
 package br.com.FindJobs.api.models;
 
 import jakarta.persistence.*;
+import jdk.jfr.Unsigned;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -26,6 +27,7 @@ public class CompanyReviewModel {
     private UserModel user;
 
     @Column(nullable = false)
+    @Unsigned
     private Integer rating;
 
     @Column(length = 500)

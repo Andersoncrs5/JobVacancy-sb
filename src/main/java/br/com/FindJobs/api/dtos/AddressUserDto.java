@@ -1,6 +1,7 @@
 package br.com.FindJobs.api.dtos;
 
 import br.com.FindJobs.api.models.AddressUserModel;
+import br.com.FindJobs.api.models.UserModel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -54,6 +55,7 @@ public record AddressUserDto(
         address.setState(state);
         address.setCountry(country);
         address.setComplementary(complementary);
+        address.setUser(new UserModel());
 
         return address;
     }

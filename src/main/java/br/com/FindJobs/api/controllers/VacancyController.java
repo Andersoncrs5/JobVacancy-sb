@@ -49,7 +49,7 @@ public class VacancyController {
         return this.service.changeStatus(id);
     }
 
-    @GetMapping("/getAllByCategory/{title}")
+    @GetMapping("/getAllByTitle/{title}")
     public ResponseEntity<?> getAllByTitle(@PathVariable String title) {
         return this.service.getAllByTitle(title);
     }

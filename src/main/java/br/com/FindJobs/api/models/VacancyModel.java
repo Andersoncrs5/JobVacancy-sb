@@ -22,8 +22,7 @@ public class VacancyModel {
     @Column(length = 300, nullable = false)
     private String title;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(length = 3000, nullable = false)
     private String description;
 
     @Column(length = 300, nullable = false, name="type_contraction")

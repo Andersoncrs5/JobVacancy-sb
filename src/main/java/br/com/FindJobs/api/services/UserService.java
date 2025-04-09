@@ -1,6 +1,7 @@
 package br.com.FindJobs.api.services;
 
 import br.com.FindJobs.api.models.UserModel;
+import br.com.FindJobs.api.models.enums.StatusUser;
 import br.com.FindJobs.api.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -70,7 +71,6 @@ public class UserService {
 
     public ResponseEntity<?> delete(Long id){
         try {
-
             UserModel user = this.get(id);
 
             this.repository.delete(user);
@@ -81,13 +81,34 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> delete2(Long id){
+    public ResponseEntity<?> login(String email, String password){
+        try {
+            var optional = this.repository.findByEmail(email);
+
+            if (optional.isEmpty()) {
+                return new ResponseEntity<>("",HttpStatus.UNAUTHORIZED);
+            }
+
+            UserModel user = optional.get();
+
+            if (!user.getPassword().equals(password)) {
+                return new ResponseEntity<>("",HttpStatus.UNAUTHORIZED);
+            }
+
+            return new ResponseEntity<>("", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<?> becomeARecruiter(Long id) {
         try {
             UserModel user = this.get(id);
 
-            this.repository.delete(user);
+            user.setRole(StatusUser.recruiter);
 
-            return new ResponseEntity<>("User deleted", HttpStatus.OK);
+            this.repository.save(user);
+            return new ResponseEntity<>("Now you are a recruter!!", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -21,7 +21,7 @@ public class CategoryController {
         return this.service.create(id, dto.mappearToCreate());
     }
 
-    @PutMapping("")
+    @PutMapping()
     public ResponseEntity<?> update(@RequestBody @Valid CategoryDto dto) {
         return this.service.update(dto.mappearToUpdate());
     }

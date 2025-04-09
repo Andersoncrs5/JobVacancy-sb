@@ -103,6 +103,9 @@ public class CommentService {
 
             CommentModel check = this.get(comment.getId());
 
+            comment.setUser(check.getUser());
+            comment.setVacancy(check.getVacancy());
+
             this.repository.save(comment);
             return new ResponseEntity<>(this.repository.save(comment), HttpStatus.OK);
         } catch (Exception e) {

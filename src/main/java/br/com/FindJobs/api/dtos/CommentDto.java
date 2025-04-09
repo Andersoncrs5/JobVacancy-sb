@@ -31,9 +31,12 @@ public record CommentDto(
 
     public CommentModel mappearToUpdate() {
         CommentModel comment = new CommentModel();
+        comment.setId(id);
         comment.setContent(content);
         comment.setEdited(true);
         comment.setParentId(parentId);
+        comment.setUser(new UserModel());
+        comment.setVacancy(new VacancyModel());
         return comment;
     }
 }

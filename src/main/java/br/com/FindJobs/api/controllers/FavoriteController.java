@@ -23,12 +23,12 @@ public class FavoriteController {
         return this.service.create(dto.userId(), dto.vacancyId());
     }
 
-    @GetMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> remove(@PathVariable() Long id ) {
         return this.service.remove(id);
     }
 
-    @GetMapping("/{userId}/{vacancyId}")
+    @GetMapping("/check/{userId}/{vacancyId}")
     public ResponseEntity<?> check(@PathVariable() Long userId, @PathVariable() Long vacancyId ) {
         return this.service.check(vacancyId, userId);
     }
@@ -42,7 +42,4 @@ public class FavoriteController {
     public ResponseEntity<?> amountFavoriteInVacancy(@PathVariable() Long id ) {
         return this.service.amountFavoriteInVacancy(id);
     }
-
-
-
 }

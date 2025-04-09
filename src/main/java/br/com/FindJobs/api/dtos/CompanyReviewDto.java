@@ -1,10 +1,15 @@
 package br.com.FindJobs.api.dtos;
 
 import br.com.FindJobs.api.models.CompanyReviewModel;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 public record CompanyReviewDto(
         Long id,
+        @Max(10)
+        @Min(0)
         Integer rating,
+        @Max(500)
         String comment
 ) {
     public CompanyReviewModel mappearToCreate(){

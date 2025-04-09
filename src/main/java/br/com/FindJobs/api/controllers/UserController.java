@@ -1,5 +1,6 @@
 package br.com.FindJobs.api.controllers;
 
+import br.com.FindJobs.api.dtos.LoginDto;
 import br.com.FindJobs.api.dtos.UserDto;
 import br.com.FindJobs.api.models.UserModel;
 import br.com.FindJobs.api.services.UserService;
@@ -25,8 +26,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserModel get(@PathVariable Long id) {
-        return this.service.get(id);
+    public ResponseEntity<?> get(@PathVariable Long id) {
+        return new ResponseEntity<>(this.service.get(id), HttpStatus.FOUND);
     }
 
     @DeleteMapping("/{id}")
@@ -38,5 +39,16 @@ public class UserController {
     public ResponseEntity<?> update(@RequestBody @Valid UserDto user) {
         return this.service.update(user.mappearToUpdate());
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody @Valid LoginDto dto) {
+        return this.service.login(dto.email(), dto.password());
+    }
+
+    @GetMapping("/becomeARecruiter/{id}")
+    public ResponseEntity<?> becomeARecruiter(@PathVariable Long id) {
+        return this.service.becomeARecruiter(id);
+    }
+
 
 }

@@ -45,7 +45,7 @@ public class CommentController {
         return this.service.delete(id);
     }
 
-    @PostMapping("/")
+    @PutMapping("/")
     public ResponseEntity<?> update(@RequestBody @Valid CommentDto dto) {
         return this.service.update(dto.mappearToUpdate());
     }

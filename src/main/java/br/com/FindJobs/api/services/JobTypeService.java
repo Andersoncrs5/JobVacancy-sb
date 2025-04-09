@@ -44,6 +44,8 @@ public class JobTypeService {
         try {
             var check = this.get(jobType.getId());
 
+            jobType.setUser(check.getUser());
+
             return new ResponseEntity<>(this.repository.save(jobType), HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

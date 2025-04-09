@@ -20,7 +20,7 @@ public class ApplicationController {
         return this.service.apply(dto);
     }
 
-    @GetMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> remove(@PathVariable() Long id ) {
         return this.service.remove(id);
     }
