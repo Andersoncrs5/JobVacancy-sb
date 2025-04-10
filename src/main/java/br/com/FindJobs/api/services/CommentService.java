@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -46,6 +47,7 @@ public class CommentService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> getAllOfUser(Long userId, Pageable pageable){
         try {
             UserModel user = this.userService.get(userId);
@@ -56,6 +58,7 @@ public class CommentService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> getAllOfVacancy(Long vacancyId, Pageable pageable){
         try {
             VacancyModel vacancy = this.vacancyService.get(vacancyId);
@@ -66,6 +69,7 @@ public class CommentService {
         }
     }
 
+    @Transactional
     public CommentModel get(Long id){
         try {
             if (id == null || id == 0) {

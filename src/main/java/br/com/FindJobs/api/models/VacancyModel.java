@@ -22,7 +22,7 @@ public class VacancyModel {
     @Column(length = 300, nullable = false)
     private String title;
 
-    @Column(length = 3000, nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @Column(length = 300, nullable = false, name="type_contraction")

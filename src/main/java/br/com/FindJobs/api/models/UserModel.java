@@ -67,6 +67,10 @@ public class UserModel {
     private List<JobTypeModel> jobType;
 
     @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<ExperienceModel> experience;
+
+    @JsonIgnore
     @OneToOne(mappedBy = "user")
     private AddressUserModel address;
 

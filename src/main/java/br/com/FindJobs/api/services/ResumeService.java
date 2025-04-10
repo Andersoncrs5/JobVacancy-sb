@@ -23,25 +23,17 @@ public class ResumeService {
 
     private final String pathStorage = "uploads/resumes/";
     private final ResumeRepository repository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public ResumeService(ResumeRepository repository, UserRepository userRepository) {
+    public ResumeService(ResumeRepository repository, UserService userService) {
         this.repository = repository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
-
 
     public ResponseEntity<?> create(Long userId, MultipartFile file) {
         try {
-            if (userId == null) {
-                return new ResponseEntity<>("ID is required", HttpStatus.BAD_REQUEST);
-            }
 
-            Optional<UserModel> userOptional = this.userRepository.findById(userId);
-            if (userOptional.isEmpty()) {
-                return new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND);
-            }
-            UserModel user = userOptional.get();
+            UserModel user = this.userService.get(userId);
 
             if (file.isEmpty()) {
                 return new ResponseEntity<>("File is required", HttpStatus.BAD_REQUEST);

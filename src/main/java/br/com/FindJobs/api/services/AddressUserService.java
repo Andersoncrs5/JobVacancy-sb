@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
@@ -25,6 +26,7 @@ public class AddressUserService {
         this.userService = userService;
     }
 
+    @Transactional
     public AddressUserModel get(Long idUser) {
         try {
             if (idUser == null || idUser == 0) {

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -53,6 +54,7 @@ public class JobTypeService {
         }
     }
 
+    @Transactional
     public JobTypeModel get(Long id) {
         try {
             if (id == null || id == 0 ) {
@@ -82,6 +84,7 @@ public class JobTypeService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> getAll() {
         try {
             return new ResponseEntity<>(this.repository.findAllByIsActivedTrue(), HttpStatus.CREATED);
@@ -90,6 +93,7 @@ public class JobTypeService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> getAllForAdm(Pageable pageable) {
         try {
             return new ResponseEntity<>(this.repository.findAll(pageable), HttpStatus.CREATED);

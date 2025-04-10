@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class VacancyService {
         this.enterpriseRepository = enterpriseRepository;
     }
 
+    @Transactional
     public ResponseEntity<?> getAll(Pageable pageable) {
         try {
             Page<VacancyModel> vacancies = this.repository.findAll(pageable);
@@ -69,6 +71,7 @@ public class VacancyService {
         }
     }
 
+    @Transactional
     public VacancyModel get(Long id) {
         try {
             if (id == null || id <= 0) {
@@ -129,6 +132,7 @@ public class VacancyService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> getAllByTitle(String title, Pageable pageable) {
         try {
             Page<VacancyModel> vacancies = this.repository.findAllByTitleContaining(title, pageable);
@@ -138,6 +142,7 @@ public class VacancyService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> getAllByCategory(String category, Pageable pageable) {
         try {
             Page<VacancyModel> vacancies = this.repository.findAllByCategory(category, pageable);

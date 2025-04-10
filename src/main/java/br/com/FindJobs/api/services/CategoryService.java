@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -49,6 +50,7 @@ public class CategoryService {
         }
     }
 
+    @Transactional
     public CategoryModel get(Long id) {
         try {
             if (id == null || id <= 0) {
@@ -103,6 +105,7 @@ public class CategoryService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> getAll(Pageable pageable) {
         try {
             return new ResponseEntity<>(this.repository.findAllByIsActivedTrue(pageable), HttpStatus.FOUND);
@@ -111,6 +114,7 @@ public class CategoryService {
         }
     }
 
+    @Transactional
     public ResponseEntity<?> getAllToAdm() {
         try {
             return new ResponseEntity<>(this.repository.findAll(), HttpStatus.FOUND);

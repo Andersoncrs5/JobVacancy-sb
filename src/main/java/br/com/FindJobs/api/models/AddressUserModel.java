@@ -33,7 +33,7 @@ public class AddressUserModel {
     @Column(length = 200, nullable = false)
     private String country;
 
-    @Column(length = 1500, nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String complementary;
 
     @OneToOne

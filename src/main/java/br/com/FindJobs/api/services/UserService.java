@@ -9,6 +9,7 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -51,6 +52,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public UserModel get(Long id) {
         try {
             if (id == null || id <= 0) {
