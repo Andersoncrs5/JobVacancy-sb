@@ -1,12 +1,13 @@
 package br.com.FindJobs.api.services;
 
+import br.com.FindJobs.api.components.ValidId;
+import br.com.FindJobs.api.components.ValidModel;
 import br.com.FindJobs.api.models.CommentModel;
 import br.com.FindJobs.api.models.UserModel;
 import br.com.FindJobs.api.models.VacancyModel;
 import br.com.FindJobs.api.repositories.CommentRepository;
 import br.com.FindJobs.api.repositories.UserRepository;
 import br.com.FindJobs.api.repositories.VacancyRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,8 @@ public class CommentService {
     private final VacancyRepository vacancyRepository;
     private final UserService userService;
     private final VacancyService vacancyService;
+    private ValidId validId;
+    private ValidModel validModel;
 
     public CommentService(CommentRepository repository, UserRepository userRepository, VacancyRepository vacancyRepository, UserService userService, VacancyService vacancyService) {
         this.repository = repository;
@@ -72,15 +75,11 @@ public class CommentService {
     @Transactional
     public CommentModel get(Long id){
         try {
-            if (id == null || id == 0) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id is required");
-            }
+            this.validId.ValidNotNull(id);
 
             CommentModel comment = this.repository.findById(id).orElse(null);
 
-            if (comment == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Comment not found");
-            }
+            this.validModel.ValidNotNull(comment, "Comment not found");
 
             return comment;
         } catch (Exception e) {
@@ -102,9 +101,7 @@ public class CommentService {
 
     public ResponseEntity<?> update(CommentModel comment) {
         try {
-            if (comment.getId() == null) {
-                return new ResponseEntity<>("Id of Comment is required", HttpStatus.BAD_REQUEST);
-            }
+            this.validId.ValidNotNull(comment.getId());
 
             CommentModel check = this.get(comment.getId());
 

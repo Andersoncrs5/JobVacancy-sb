@@ -1,10 +1,10 @@
 package br.com.FindJobs.api.services;
 
+import br.com.FindJobs.api.components.ValidId;
 import br.com.FindJobs.api.models.AddressUserModel;
 import br.com.FindJobs.api.models.UserModel;
 import br.com.FindJobs.api.repositories.AddressUserRepository;
 import br.com.FindJobs.api.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,7 @@ public class AddressUserService {
     private final AddressUserRepository repository;
     private final UserRepository userRepository;
     private final UserService userService;
+    private ValidId validId;
 
     public AddressUserService(AddressUserRepository repository, UserRepository userRepository, UserService userService) {
         this.repository = repository;
@@ -29,9 +30,7 @@ public class AddressUserService {
     @Transactional
     public AddressUserModel get(Long idUser) {
         try {
-            if (idUser == null || idUser == 0) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id is required");
-            }
+            this.validId.ValidNotNull(idUser);
 
             UserModel user = this.userService.get(idUser);
 
@@ -75,8 +74,7 @@ public class AddressUserService {
 
     public ResponseEntity<?> update(Long userId, AddressUserModel model){
         try {
-            if (model.getId() <= 0)
-                return new ResponseEntity<>("id is required", HttpStatus.BAD_REQUEST);
+            this.validId.ValidNotNull(model.getId());
 
             var check = this.get(userId);
 

@@ -1,5 +1,7 @@
 package br.com.FindJobs.api.services;
 
+import br.com.FindJobs.api.components.ValidId;
+import br.com.FindJobs.api.components.ValidModel;
 import br.com.FindJobs.api.models.FavoriteModel;
 import br.com.FindJobs.api.models.UserModel;
 import br.com.FindJobs.api.models.VacancyModel;
@@ -24,6 +26,8 @@ public class FavoriteService {
     private final VacancyRepository vacancyRepository;
     private final UserService userService;
     private final VacancyService vacancyService;
+    private ValidModel validModel;
+    private ValidId validId;
 
     public FavoriteService(FavoriteRepository repository, UserRepository userRepository, VacancyRepository vacancyRepository, UserService userService, VacancyService vacancyService) {
         this.repository = repository;
@@ -58,15 +62,11 @@ public class FavoriteService {
 
     public ResponseEntity<?> remove(Long id) {
         try {
-            if (id == null || id == 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id is required");
-            }
+            this.validId.ValidNotNull(id);
 
             FavoriteModel model = this.repository.findById(id).orElse(null);
 
-            if (model == null) {
-                return new ResponseEntity<>("Favorite not found", HttpStatus.NOT_FOUND);
-            }
+            this.validModel.ValidNotNull(model, "Favorite vacancy not found");
 
             this.repository.delete(model);
 

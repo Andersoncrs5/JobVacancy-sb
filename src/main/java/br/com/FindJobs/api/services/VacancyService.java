@@ -1,10 +1,11 @@
 package br.com.FindJobs.api.services;
 
+import br.com.FindJobs.api.components.ValidId;
+import br.com.FindJobs.api.components.ValidModel;
 import br.com.FindJobs.api.models.EnterpriseModel;
 import br.com.FindJobs.api.models.VacancyModel;
 import br.com.FindJobs.api.repositories.EnterpriseRepository;
 import br.com.FindJobs.api.repositories.VacancyRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -13,13 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-
 @Service
 public class VacancyService {
 
     private final VacancyRepository repository;
     private final EnterpriseRepository enterpriseRepository;
+    private ValidId validId;
+    private ValidModel validModel;
 
     public VacancyService(VacancyRepository repository, EnterpriseRepository enterpriseRepository) {
         this.repository = repository;
@@ -38,15 +39,12 @@ public class VacancyService {
 
     public ResponseEntity<?> create(Long enterpriseId, VacancyModel model) {
         try {
-            if (enterpriseId == null || enterpriseId == 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id of enterprise is required");
-            }
+
+            this.validId.ValidNotNull(enterpriseId);
 
             EnterpriseModel enterprise = this.enterpriseRepository.findById(enterpriseId).orElse(null);
 
-            if (enterprise == null) {
-                return new ResponseEntity<>("Enterprise not found!", HttpStatus.NOT_FOUND);
-            }
+            this.validModel.ValidNotNull(enterprise, "Enterprise not found");
 
             model.setEnterprise(enterprise);
 
@@ -74,15 +72,11 @@ public class VacancyService {
     @Transactional
     public VacancyModel get(Long id) {
         try {
-            if (id == null || id <= 0) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id of enterprise is required");
-            }
+            this.validId.ValidNotNull(id);
 
             VacancyModel vacancy = this.repository.findById(id).orElse(null);
 
-            if (vacancy == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Vacancy not found");
-            }
+            this.validModel.ValidNotNull(vacancy, "Vacancy not found");
 
             return vacancy;
         } catch (Exception e) {
@@ -92,15 +86,11 @@ public class VacancyService {
 
     public ResponseEntity<?> delete(Long id) {
         try {
-            if (id == null || id == 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id of enteprise is required");
-            }
+            this.validId.ValidNotNull(id);
 
             VacancyModel vacancy = this.repository.findById(id).orElse(null);
 
-            if (vacancy == null) {
-                return new ResponseEntity<>("Vacancy not found", HttpStatus.NOT_FOUND);
-            }
+            this.validModel.ValidNotNull(vacancy, "Vacancy not found");
 
             this.repository.delete(vacancy);
 
@@ -112,15 +102,11 @@ public class VacancyService {
 
     public ResponseEntity<?> changeStatus(Long id) {
         try {
-            if (id == null || id == 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id of enteprise is required");
-            }
+            this.validId.ValidNotNull(id);
 
             VacancyModel vacancy = this.repository.findById(id).orElse(null);
 
-            if (vacancy == null) {
-                return new ResponseEntity<>("Vacancy not found", HttpStatus.NOT_FOUND);
-            }
+            this.validModel.ValidNotNull(vacancy, "Vacancy not found");
 
             vacancy.setStatus(!vacancy.getStatus());
 

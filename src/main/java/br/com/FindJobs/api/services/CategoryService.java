@@ -1,10 +1,10 @@
 package br.com.FindJobs.api.services;
 
+import br.com.FindJobs.api.components.ValidId;
+import br.com.FindJobs.api.components.ValidModel;
 import br.com.FindJobs.api.models.CategoryModel;
 import br.com.FindJobs.api.models.UserModel;
 import br.com.FindJobs.api.repositories.CategoryRepository;
-import br.com.FindJobs.api.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +17,8 @@ public class CategoryService {
 
     private final CategoryRepository repository;
     private final UserService userService;
+    private ValidId validId;
+    private ValidModel validModel;
 
     public CategoryService(CategoryRepository repository, UserService userService) {
         this.repository = repository;
@@ -53,15 +55,10 @@ public class CategoryService {
     @Transactional
     public CategoryModel get(Long id) {
         try {
-            if (id == null || id <= 0) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id is required");
-            }
-
+            this.validId.ValidNotNull(id);
             CategoryModel category = this.repository.findById(id).orElse(null);
 
-            if (category == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
-            }
+            this.validModel.ValidNotNull(category, "Category not found");
 
             return category;
         } catch (Exception e) {

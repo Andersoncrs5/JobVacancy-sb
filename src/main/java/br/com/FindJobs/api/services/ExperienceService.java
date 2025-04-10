@@ -1,10 +1,10 @@
 package br.com.FindJobs.api.services;
 
+import br.com.FindJobs.api.components.ValidId;
+import br.com.FindJobs.api.components.ValidModel;
 import br.com.FindJobs.api.models.ExperienceModel;
 import br.com.FindJobs.api.models.UserModel;
-import br.com.FindJobs.api.models.VacancyModel;
 import br.com.FindJobs.api.repositories.ExperienceRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-
 @Service
 public class ExperienceService {
 
     private final ExperienceRepository repository;
     private final UserService userService;
+    private ValidId validId;
+    private ValidModel validModel;
 
     public ExperienceService(ExperienceRepository repository, UserService userService) {
         this.repository = repository;
@@ -47,11 +47,10 @@ public class ExperienceService {
     @Transactional
     public ExperienceModel get(Long id) {
         try {
+            this.validId.ValidNotNull(id);
             ExperienceModel model = this.repository.findById(id).orElse(null);
 
-            if (model == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Experience not found");
-            }
+            this.validModel.ValidNotNull(model, "Experience not found");
 
             return model;
         } catch (Exception e) {
@@ -87,9 +86,7 @@ public class ExperienceService {
 
     public ExperienceModel update(ExperienceModel experience) {
         try {
-            if (experience.getId() == 0 || experience.getId() == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id should not be egual the 0 or null");
-            }
+            this.validId.ValidNotNull(experience.getId());
 
             var check = this.get(experience.getId());
 

@@ -1,11 +1,10 @@
 package br.com.FindJobs.api.services;
 
+import br.com.FindJobs.api.components.ValidId;
+import br.com.FindJobs.api.components.ValidModel;
 import br.com.FindJobs.api.models.UserModel;
 import br.com.FindJobs.api.models.enums.StatusUser;
 import br.com.FindJobs.api.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserService {
 
     private final UserRepository repository;
+    private ValidId validId;
+    private ValidModel validModel;
 
     public UserService(UserRepository repository) {
         this.repository = repository;
@@ -55,15 +56,11 @@ public class UserService {
     @Transactional
     public UserModel get(Long id) {
         try {
-            if (id == null || id <= 0) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id of user is required");
-            }
+            this.validId.ValidNotNull(id);
 
             UserModel user = this.repository.findById(id).orElse(null);
 
-            if (user == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-            }
+            this.validModel.ValidNotNull(user, "User not found");
 
             return user;
         } catch (Exception e) {

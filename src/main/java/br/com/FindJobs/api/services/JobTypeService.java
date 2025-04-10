@@ -1,10 +1,11 @@
 package br.com.FindJobs.api.services;
 
+import br.com.FindJobs.api.components.ValidId;
+import br.com.FindJobs.api.components.ValidModel;
 import br.com.FindJobs.api.models.JobTypeModel;
 import br.com.FindJobs.api.models.UserModel;
 import br.com.FindJobs.api.repositories.JobTypeRepository;
 import br.com.FindJobs.api.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,8 @@ public class JobTypeService {
     private final JobTypeRepository repository;
     private final UserRepository userRepository;
     private final UserService userService;
+    private ValidId validId;
+    private ValidModel validModel;
 
     public JobTypeService(JobTypeRepository repository, UserRepository userRepository, UserService userService) {
         this.repository = repository;
@@ -57,15 +60,11 @@ public class JobTypeService {
     @Transactional
     public JobTypeModel get(Long id) {
         try {
-            if (id == null || id == 0 ) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Id should be different of null");
-            }
+            this.validId.ValidNotNull(id);
 
             JobTypeModel check = this.repository.findById(id).orElse(null);
 
-            if (check == null) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Job Type not found");
-            }
+            this.validModel.ValidNotNull(check, "Job type not found");
 
             return check;
         } catch (Exception e) {

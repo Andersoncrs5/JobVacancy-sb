@@ -1,5 +1,7 @@
 package br.com.FindJobs.api.services;
 
+import br.com.FindJobs.api.components.ValidId;
+import br.com.FindJobs.api.components.ValidModel;
 import br.com.FindJobs.api.dtos.ApplicationDto;
 import br.com.FindJobs.api.models.ApplicationModel;
 import br.com.FindJobs.api.models.UserModel;
@@ -21,6 +23,8 @@ public class ApplicationService {
     private final VacancyRepository vacancyRepository;
     private final UserService userService;
     private final VacancyService vacancyService;
+    private ValidId validId;
+    private ValidModel validModel;
 
     public ApplicationService(ApplicationRepository repository, VacancyRepository vacancyRepository, UserService userService, VacancyService vacancyService) {
         this.repository = repository;
@@ -58,15 +62,11 @@ public class ApplicationService {
 
     public ResponseEntity<?> remove(Long id) {
         try {
-            if (id == null || id == 0) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id is required");
-            }
+            this.validId.ValidNotNull(id);
 
             ApplicationModel model = this.repository.findById(id).orElse(null);
 
-            if (model == null) {
-                return new ResponseEntity<>("Application not found", HttpStatus.NOT_FOUND);
-            }
+            this.validModel.ValidNotNull(model, "Application not found");
 
             this.repository.delete(model);
 
